@@ -4,23 +4,17 @@ import org.slf4j.Logger;
 
 import interfaces.InterfazContactoSim;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
 
-import interfaces.InterfazContactoSim;
 import modelo.DatosSimulation;
-import modelo.DatosSolicitud;
 import modelo.Punto;
+import org.springframework.stereotype.Controller;
 
 @Controller
 public class GridController {
@@ -46,4 +40,6 @@ public class GridController {
         model.addAttribute("colors", colors);
         return "grid";
     }
+
+
 }

@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import interfaces.InterfazContactoSim;
 import modelo.DatosSolicitud;
 
+
+
 @Controller
 public class SolicitudController {
 	

@@ -1,51 +1,76 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-    	<title>Welcome</title>
-		<style>
-			.grid {
-		  		display: grid;
-		  		grid-template-columns: repeat(3, 50px);
-		  		grid-gap: 5px;
-			}
+<head>
+	<title>Simulación - TFG</title>
+	<style>
+		.grid {
+			display: grid;
+			/* El ancho se ajustará dinámicamente por JS */
+			grid-gap: 2px;
+			margin-top: 20px;
+		}
+		.grid div {
+			width: 30px;
+			height: 30px;
+			border: 1px solid #eee;
+		}
+		.slider-container { margin: 20px; }
+	</style>
+</head>
+<body>
+<div class="slider-container">
+	<input type="range" id="mySlider" min="0" th:max="${maxTime - 1}" value="0">
+	<span id="sliderValue">Tiempo: 0</span>
+</div>
 
-			.grid div {
-		  		width: 50px;
-		  		height: 50px;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="slider-container">
-		    <input type="range" id="mySlider" min="0" th:max="${maxTime}" value="50">
-		    <span id="sliderValue">0</span>
-		</div>
-		<div class="grid" id='gr'></div>
-		<script th:inline="javascript">
-			const count = [[${count}]];
-			const colors = [[${colors}]];
-			function createSquares(){
-				var grid = document.getElementById('gr');
-				for(var i = 0; i < count; i++){
-					for(var j = 0; j < count; j++){
-				    	var node = document.createElement("div");
-						node.id = i+'-'+j;
-				      	node.style.background = colors['0-'+i+'-'+j]??'blue';
-				      	grid.appendChild(node);
-				    }
-				}
-				document.getElementsByClassName('grid').item(0).style.gridTemplateColumns = 'repeat('+count+',50px)';
-			}
-			const slider = document.getElementById("mySlider");
+<div class="grid" id='gr'></div>
 
-			slider.addEventListener("input", function() {
-		    	for(var y = 0; y < count; y++){
-					for(var x = 0; x < count; x++){
-						var node = document.getElementById(y+'-'+x);
-						node.style.background = colors[slider.value+'-'+y+'-'+x]??'blue';
-					}
+<script th:inline="javascript">
+	// Obtenemos los datos de Spring
+	const count = [[${count}]];
+	const colors = [[${colors}]];
+	const slider = document.getElementById("mySlider");
+	const sliderValue = document.getElementById("sliderValue");
+
+	function createSquares(){
+		const grid = document.getElementById('gr');
+		grid.innerHTML = ''; // Limpiar por si acaso
+
+		// Ajustar las columnas de la rejilla según el 'count' (anchoTablero)
+		grid.style.gridTemplateColumns = `repeat(${count}, 32px)`;
+
+		for(let y = 0; y < count; y++){
+			for(let x = 0; x < count; x++){
+				const node = document.createElement("div");
+				// Importante: El ID debe coincidir con lo que busca el listener del slider
+				node.id = y + '-' + x;
+
+				// Buscamos el color en el mapa: "tiempo-y-x"
+				// Si no existe, ponemos gris claro para ver la rejilla
+				node.style.background = colors['0-' + y + '-' + x] || '#f9f9f9';
+				grid.appendChild(node);
+			}
+		}
+	}
+
+	// EVENTO DEL SLIDER
+	slider.addEventListener("input", function() {
+		const t = slider.value;
+		sliderValue.innerText = "Tiempo: " + t;
+
+		for(let y = 0; y < count; y++){
+			for(let x = 0; x < count; x++){
+				const node = document.getElementById(y + '-' + x);
+				if(node) {
+					// Actualizamos el fondo según el tiempo seleccionado
+					node.style.background = colors[t + '-' + y + '-' + x] || '#f9f9f9';
 				}
-			});
-		</script>
-	</body>
+			}
+		}
+	});
+
+	// ¡CRITICAL! Llamar a la función al cargar la página
+	window.onload = createSquares;
+</script>
+</body>
 </html>
