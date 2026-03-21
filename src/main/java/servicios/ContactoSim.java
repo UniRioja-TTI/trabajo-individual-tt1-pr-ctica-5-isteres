@@ -69,22 +69,13 @@ public class ContactoSim implements InterfazContactoSim {
             logger.warn("Se intentó descargar datos para un ticket inexistente: {}", ticket);
             return new DatosSimulation(); // Devolvemos objeto vacío para evitar NullPointerException
         }
-
         try {
-            /* * NOTA PARA TU TFG: Aquí deberías hacer la llamada a la MÁQUINA VIRTUAL externa.
-             * NO uses localhost:8080, usa la IP de la VM.
-             * Si por ahora solo tienes datos simulados, usa la lógica de abajo:
-             */
-
             DatosSimulation sim = new DatosSimulation();
-
             // Simulamos el ancho del tablero basado en la solicitud original
             int ancho = 10; // Valor por defecto o sacado de 'solicitud'
             sim.setAnchoTablero(ancho);
-
             Map<Integer, List<Punto>> puntosMap = new HashMap<>();
             int maxT = 0;
-
             // Generamos datos de prueba para que veas algo en el /grid
             for (int t = 0; t < 10; t++) { // 10 pasos de tiempo
                 List<Punto> puntosEnT = new ArrayList<>();
@@ -101,10 +92,8 @@ public class ContactoSim implements InterfazContactoSim {
                 puntosMap.put(t, puntosEnT);
                 maxT = t;
             }
-
             sim.setPuntos(puntosMap);
             sim.setMaxSegundos(maxT + 1);
-
             logger.info("Datos de simulación procesados localmente para el ticket {}", ticket);
             return sim;
 
@@ -124,11 +113,7 @@ public class ContactoSim implements InterfazContactoSim {
         return entities.stream().anyMatch(e -> e.getId() == id);
     }
 
-    @Override
-    public String obtenerGrid(String tok) {
-        DatosSimulation ds = this.descargarDatos(Integer.parseInt(tok));
-        return "Datos descargados para token: " + tok;
-    }
+
 
 
 }

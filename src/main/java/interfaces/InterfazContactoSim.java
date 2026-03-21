@@ -11,5 +11,4 @@ public interface InterfazContactoSim {
 	public DatosSimulation descargarDatos(int ticket);
 	public List<Entidad> getEntities();
 	public boolean isValidEntityId(int id);
-	public String obtenerGrid(String tok);
 }
